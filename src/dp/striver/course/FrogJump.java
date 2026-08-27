@@ -15,12 +15,9 @@ public class FrogJump {
     public static void main(String[] args) {
         FrogJump main=new FrogJump();
         int[] height = {
-                3, 7, 2, 8, 4,
-                6, 5, 9, 1, 10,
-                12, 14, 11, 13, 15,
-                17, 16, 20, 18, 22
+                10, 5, 20, 0, 15
         };
-        var res= main.minCost(height);
+        var res= main.frogJump(height,2);
         System.out.println("res : "+res);
         System.out.println("totalItr : "+totalItr);
     }
@@ -30,7 +27,7 @@ public class FrogJump {
         if(height.length<=1){
             return 0;
         }
-        return getJumpCost(height.length-1,dp,height);
+        return getJumpCostWithoutRec(height.length-1,dp,height);
     }
     private int getJumpCost(int index, int[] height){
         totalItr++;
@@ -71,5 +68,20 @@ public class FrogJump {
            dp[i]=Math.min(oneJump,twoJump);
        }
         return dp[index];
+    }
+
+    public int frogJump(int[] heights, int k) {
+        int[]dp=new int[heights.length];
+        Arrays.fill(dp,Integer.MAX_VALUE);
+        dp[0]=0;
+        for(int i=1;i<heights.length;i++){
+            for(int jump=1;jump<=k;jump++){
+                if(i-jump>=0){
+                    int jumpValue=dp[i-jump]+Math.abs(heights[i]-heights[i-jump]);
+                    dp[i]=Math.min(dp[i],jumpValue);
+                }
+            }
+        }
+        return dp[heights.length-1];
     }
 }
